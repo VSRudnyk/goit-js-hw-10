@@ -1,7 +1,9 @@
 <div class="country-container">
-    <img class="country-img" src="{{[0].flags.svg}}" alt="{{[0].name.official}}">
-    <p class="country-text">{{[0].name.official}}</p>
+    <img class="country-container__img" src="{{flags.svg}}" alt="Flag">
+    <p class="country-container__text">{{name.official}}</p>
 </div>
-<p class="capital"><b>Capital:</b> {{[0].capital}}</p>
-<p class="population"><b>Population:</b> {{[0].population}}</p>
-<p class="languages"><b>languages:</b> {{[0].languages}}</p>
+<p><span class="span-text">Capital:</span>{{capital}}</p>
+<p><span class="span-text">Population:</span>{{population}}</p>
+<p><span class="span-text">Languages:</span>{{#each languages}}
+    <span>{{this}}</span>{{/each}}
+</p>

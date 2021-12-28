@@ -1,27 +1,50 @@
 import './css/styles.css';
-import API from './api-service';
-import countryCardTpl from './templates/country-card.hbs';
-var debounce = require('lodash.debounce');
+import API from './fetchCountries';
 import getRefs from './get-refs';
+import countryCardTpl from './templates/country-card.hbs';
+import countriesCardsTpl from './templates/countries-cards.hbs';
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
+var debounce = require('lodash.debounce');
+
+const DEBOUNCE_DELAY = 800;
 
 const refs = getRefs();
-const DEBOUNCE_DELAY = 300;
-const debuonced = debounce(onSearch, DEBOUNCE_DELAY);
 
-refs.searchForm.addEventListener('input', debuonced);
+refs.searchCountry.addEventListener('input', debounce(onSearch, DEBOUNCE_DELAY));
 
 function onSearch(e) {
   e.preventDefault();
-
   const searchQuery = e.target.value;
-  API.fetchCountries(searchQuery).then(renderCountryCard).catch(onFetchError);
+  refs.countriesCards.innerHTML = '';
+  refs.countryCard.innerHTML = '';
+
+  API.fetchCountries(searchQuery)
+    .then(renderCountryCard)
+    .catch(error => {
+      console.log(error);
+    });
 }
 
 function renderCountryCard(country) {
-  const markup = countryCardTpl(country);
-  refs.cardContainer.innerHTML = markup;
-}
-
-function onFetchError(error) {
-  alert('We cant find your country');
+  if (country.status === 404) {
+    return Notify.failure(`"Oops, there is no country with that name"`);
+  } else if (country.length === 1) {
+    country.map(({ name, flags, capital, population, languages }) => {
+      refs.countriesCards.innerHTML = '';
+      refs.countryCard.insertAdjacentHTML(
+        'beforeend',
+        countryCardTpl({ name, flags, capital, population, languages }),
+      );
+    });
+  } else if (country.length <= 10) {
+    country.map(({ name, flags, capital, population, languages }) => {
+      refs.countryCard.innerHTML = '';
+      refs.countriesCards.insertAdjacentHTML(
+        'beforeend',
+        countriesCardsTpl({ name, flags, capital, population, languages }),
+      );
+    });
+  } else if (country.length > 10) {
+    Notify.info('Too many matches found. Please enter a more specific name.');
+  }
 }

@@ -12,6 +12,11 @@ body {
   line-height: 1.5;
 }
 
+p {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
 #search-box {
   font: inherit;
   padding: 8px;
@@ -19,24 +24,46 @@ body {
   margin-bottom: 16px;
 }
 
-.country-info {
-  display: inline-block;
-  font: inherit;
-  padding: 8px;
-}
-
 .country-container {
   display: flex;
+  align-items: center;
+  margin-bottom: 25px;
 }
 
-.country-img {
-  object-fit: contain;
-  width: 90px;
-  height: auto;
+.country-container__img {
+  /* display: block;
+  object-fit: cover; */
+  width: auto;
+  height: 50px;
 }
 
-.country-text {
-  margin: 0;
-  margin-left: 20px;
+.country-container__text {
   font-size: 50px;
+  margin-left: 20px;
+}
+
+.countries-list__item {
+  display: flex;
+  align-items: center;
+}
+
+.countries-list__item:not(:last-child) {
+  margin-bottom: 15px;
+}
+
+.countries-list__img {
+  display: block;
+  object-fit: cover;
+  width: auto;
+  height: 25px;
+}
+
+.countries-list__text {
+  font-size: 25px;
+  margin-left: 15px;
+}
+
+.span-text {
+  font-weight: bold;
+  margin-right: 15px;
 }
